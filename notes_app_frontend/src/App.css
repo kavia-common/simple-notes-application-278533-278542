@@ -1,104 +1,272 @@
-/* CSS Variables for Theme Management */
 :root {
-  /* Light theme colors */
-  --bg-primary: #ffffff;
-  --bg-secondary: #f8f9fa;
-  --text-primary: #282c34;
-  --text-secondary: #61dafb;
-  --border-color: #e9ecef;
-  --button-bg: #007bff;
-  --button-text: #ffffff;
+  /* Light theme from style guide */
+  --primary: #3b82f6;
+  --secondary: #64748b;
+  --success: #06b6d4;
+  --error: hsl(0 84% 60%);
+  --bg: #ffffff;
+  --surface: #f8fafc;
+  --text: #111827;
+  --muted: #94a3b8;
+  --border: #e5e7eb;
+  --focus: #2563eb; /* darker primary for focus ring */
 }
 
 [data-theme="dark"] {
-  /* Dark theme colors */
-  --bg-primary: #1a1a1a;
-  --bg-secondary: #282c34;
-  --text-primary: #ffffff;
-  --text-secondary: #61dafb;
-  --border-color: #404040;
-  --button-bg: #0056b3;
-  --button-text: #ffffff;
+  --bg: #0b1220;
+  --surface: #111827;
+  --text: #e5e7eb;
+  --muted: #9ca3af;
+  --border: #1f2937;
+  --focus: #60a5fa;
 }
 
-.App {
-  text-align: center;
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
+/* Base */
+* { box-sizing: border-box; }
+html, body, #root { height: 100%; }
+body {
+  margin: 0;
+  color: var(--text);
+  background: var(--bg);
+}
+
+.app-root {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
   min-height: 100vh;
-  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+/* Topbar */
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 0.75rem 1rem;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.brand {
+  font-weight: 700;
+  letter-spacing: 0.2px;
+}
+.topbar-actions {
+  display: flex;
+  gap: 0.5rem;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+/* Layout */
+.layout {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  min-height: 0;
 }
 
-.App-header {
-  background-color: var(--bg-secondary);
-  min-height: 100vh;
+/* Sidebar */
+.sidebar {
+  border-right: 1px solid var(--border);
+  background: var(--surface);
+  min-height: calc(100vh - 112px);
   display: flex;
   flex-direction: column;
+}
+.sidebar-header {
+  display: flex;
+  gap: 0.5rem;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: var(--text-primary);
-  transition: background-color 0.3s ease;
-  position: relative;
+  justify-content: space-between;
+  padding: 0.75rem;
+  border-bottom: 1px solid var(--border);
 }
-
-.App-link {
-  color: var(--text-secondary);
-  transition: color 0.3s ease;
+.app-title {
+  margin: 0;
+  font-size: 1.1rem;
 }
-
-.theme-toggle {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  background-color: var(--button-bg);
-  color: var(--button-text);
-  border: none;
+.note-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.5rem;
+  overflow: auto;
+  min-height: 0;
+}
+.note-list-item {
+  display: grid;
+  grid-template-rows: auto auto;
+  text-align: left;
+  gap: 2px;
+  background: transparent;
+  border: 1px solid transparent;
   border-radius: 8px;
-  padding: 10px 20px;
-  font-size: 14px;
+  padding: 0.5rem 0.6rem;
+  cursor: pointer;
+  color: var(--text);
+}
+.note-list-item:hover {
+  background: rgba(59, 130, 246, 0.08);
+  border-color: var(--border);
+}
+.note-list-item.active {
+  background: rgba(59, 130, 246, 0.12);
+  border-color: var(--primary);
+  outline: none;
+}
+.note-title {
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.note-meta {
+  color: var(--muted);
+  font-size: 12px;
+}
+.empty-list {
+  color: var(--muted);
+  padding: 0.75rem;
+}
+
+/* Content / Editor */
+.content-panel {
+  min-width: 0;
+  padding: 1rem 1.25rem;
+}
+.editor-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+.editor-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.5rem 0.75rem;
+}
+.badge {
+  color: var(--secondary);
+  font-size: 12px;
+}
+.editor-form {
+  display: grid;
+  gap: 0.5rem;
+}
+.title-input {
+  font-size: 1.5rem;
+  font-weight: 700;
+  padding: 0.5rem 0.75rem;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+}
+.content-input {
+  font-size: 1rem;
+  line-height: 1.5;
+  padding: 0.75rem;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 50vh;
+}
+
+/* Empty state */
+.empty-wrapper, .empty-state {
+  border: 2px dashed var(--border);
+  border-radius: 12px;
+  padding: 2rem;
+  text-align: center;
+  color: var(--secondary);
+  background: var(--surface);
+}
+
+/* Buttons */
+.btn {
+  appearance: none;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  border-radius: 10px;
+  padding: 0.45rem 0.8rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.06s ease;
+}
+.btn:active {
+  transform: translateY(1px);
+}
+.btn-primary {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #ffffff;
+}
+.btn-primary:hover {
+  background: #2563eb;
+  border-color: #2563eb;
+}
+.btn-secondary {
+  background: var(--secondary);
+  border-color: var(--secondary);
+  color: #ffffff;
+}
+.btn-secondary:hover {
+  filter: brightness(0.95);
+}
+.btn-success {
+  background: var(--success);
+  border-color: var(--success);
+  color: #00323b;
 }
 
-.theme-toggle:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-  opacity: 0.9;
+/* Focus styles for accessibility */
+:where(.btn, .note-list-item, .title-input, .content-input, .note-list)[tabindex], input, textarea, button {
+  outline: none;
+}
+:where(.btn, .note-list-item, input, textarea):focus-visible {
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--focus) 40%, transparent);
+  border-color: var(--focus);
 }
 
-.theme-toggle:active {
-  transform: translateY(0);
+/* Screen reader only */
+.sr-only {
+  position: absolute !important;
+  height: 1px; width: 1px;
+  overflow: hidden;
+  clip: rect(1px, 1px, 1px, 1px);
+  white-space: nowrap; border: 0; padding: 0; margin: -1px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+/* Footer */
+.footer {
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--secondary);
+  font-size: 12px;
+  padding: 0.5rem 1rem;
+}
+
+/* Responsive */
+@media (max-width: 920px) {
+  .layout {
+    grid-template-columns: 230px 1fr;
   }
-  to {
-    transform: rotate(360deg);
-  }
 }
-
-/* Responsive design for mobile */
-@media (max-width: 768px) {
-  .theme-toggle {
-    top: 10px;
-    right: 10px;
-    padding: 8px 16px;
-    font-size: 12px;
+@media (max-width: 680px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+  .sidebar {
+    min-height: auto;
+    order: 2;
+  }
+  .content-panel {
+    order: 1;
   }
 }
